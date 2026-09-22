@@ -5,16 +5,19 @@
 </head>
 <body>
   <h1>Sum of multiples of 3 or 5 below 1000</h1>
+  <button onclick="calculateSum()">Calculate</button>
   <p id="result"></p>
 
   <script>
-    let sum = 0;
-    for (let i = 1; i < 1000; i++) {
-      if (i % 3 === 0 || i % 5 === 0) {
-        sum += i;
+    function calculateSum() {
+      let sum = 0;
+      for (let i = 1; i < 1000; i++) {
+        if (i % 3 === 0 || i % 5 === 0) {
+          sum += i;
+        }
       }
+      document.getElementById("result").innerText = "Answer: " + sum;
     }
-    document.getElementById("result").innerText = "Answer: " + sum;
   </script>
 </body>
 </html>
