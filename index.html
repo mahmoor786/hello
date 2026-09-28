@@ -4,54 +4,51 @@
   <title>Multiples of 3 or 5</title>
 </head>
 <body>
+
   <section>
-  <h1>.Sum of multiples of 3 or 5 below 1000</h1>
-  <button onclick="calculateSum()">Calculate</button>
-  <p id="result"></p>
-  <button href="ex2_1.html">EX 2.1</button>
- <!-- input/parse demo
-            let f=()=>{
-      let val=parseInt(document.getElementById('i').value)
-      alert(2*val);
-    }
-        -->
-  <script>
-    function calculateSum() {
-      let sum = 0;
-      for (let i = 1; i < 1000; i++) {
-        if (i % 3 === 0 || i % 5 === 0) {
-          sum += i;
+    <h1>Sum of multiples of 3 or 5 below 1000</h1>
+    <button onclick="calculateSum1()">Calculate</button>
+    <p id="result1"></p>
+
+    <script>
+      function calculateSum1() {
+        let sum = 0;
+        for (let i = 1; i < 1000; i++) {
+          if (i % 3 === 0 || i % 5 === 0) {
+            sum += i;
+          }
         }
+        document.getElementById("result1").innerText = "Answer: " + sum;
       }
-      document.getElementById("result").innerText = "Answer: " + sum;
-    }
-  </script>
+    </script>
   </section>
+
   <section>
     <h1>Sum of multiples of a or b below n</h1>
- 
-  <input type="number" id="a" placeholder="Enter a">
-  <input type="number" id="b" placeholder="Enter b">
-  <input type="number" id="n" placeholder="Enter n">
-  <br><br>
-  <button onclick="calculateSum()">Calculate</button>
-  <p id="result"></p>
- 
-  <script>
-    function calculateSum() {
-      let a = Number(document.getElementById("a").value);
-      let b = Number(document.getElementById("b").value);
-      let n = Number(document.getElementById("n").value);
- 
-      let sum = 0;
-      for (let i = 1; i < n; i++) {
-        if (i % a === 0 || i % b === 0) {
-          sum += i;
+
+    <input type="number" id="a" placeholder="Enter a">
+    <input type="number" id="b" placeholder="Enter b">
+    <input type="number" id="n" placeholder="Enter n">
+    <br><br>
+    <button onclick="calculateSum2()">Calculate</button>
+    <p id="result2"></p>
+
+    <script>
+      function calculateSum2() {
+        let a = Number(document.getElementById("a").value);
+        let b = Number(document.getElementById("b").value);
+        let n = Number(document.getElementById("n").value);
+
+        let sum = 0;
+        for (let i = 1; i < n; i++) {
+          if (i % a === 0 || i % b === 0) {
+            sum += i;
+          }
         }
+        document.getElementById("result2").innerText = "Answer: " + sum;
       }
-      document.getElementById("result").innerText = "Answer: " + sum;
-    }
-  </script>
+    </script>
   </section>
+
 </body>
 </html>
