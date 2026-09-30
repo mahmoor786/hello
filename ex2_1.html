@@ -1,37 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ex 3 and Ex 4: Sum of multiples</title>
 </head>
 <body>
-    
-<h1>Sum of multiples of a or b below n</h1>
- 
-  <input type="number" id="a" placeholder="Enter a">
-  <input type="number" id="b" placeholder="Enter b">
-  <input type="number" id="n" placeholder="Enter n">
-  <br><br>
-  <button onclick="calculateSum()">Calculate</button>
-  <p id="result"></p>
- 
-  <script>
-    function calculateSum() {
-      let a = Number(document.getElementById("a").value);
-      let b = Number(document.getElementById("b").value);
-      let n = Number(document.getElementById("n").value);
- 
-      let sum = 0;
-      for (let i = 1; i < n; i++) {
-        if (i % a === 0 || i % b === 0) {
-          sum += i;
-        }
+
+  <!-- ============ SECTION 1: EX 3 ============ -->
+  <section>
+    <!-- HTML -->
+    <BR/>
+    Ex 3: Create a function to find the sum of all the multiples of a or b in list l.<BR>
+    Ex 3.1 Use text boxes to get a, b and l, with l as a comma or space separated list.<BR><BR>
+
+    a: <input type="text" id="a3" placeholder="e.g. 3"><BR>
+    b: <input type="text" id="b3" placeholder="e.g. 5"><BR>
+    l: <input type="text" id="l3" placeholder="e.g. 1, 2 3 4 5 6 10 15"><BR><BR>
+
+    <button onclick="runEx3()">Calculate</button>
+    <p id="out3"></p>
+
+    <!-- JS -->
+    <script>
+      // Turn text like "1, 2 3" into the list [1, 2, 3]
+      function parseList3(text) {
+        return text.split(/[\s,]+/)
+          .filter(s => s !== "")
+          .map(Number)
+          .filter(n => !isNaN(n));
       }
-      document.getElementById("result").innerText = "Answer: " + sum;
-    }
-  </script>
-  <a href="index.html"><button>HOME</button></a>
-</body>
+
+      // Sum every number in l that is a multiple of a or b (each counted once)
+      function sumMultiples3(a, b, l) {
+        let total = 0;
+        for (const n of l) {
+          if ((a !== 0 && n % a === 0) || (b !== 0 && n % b === 0)) {
+            total += n;
+          }
+        }
+        return total;
+      }
+
+      // Read the text boxes, call the function, show the result
+      function runEx3() {
+        const a = Number(document.getElementById("a3").value);
+        const b = Number(document.getElementById("b3").value);
+        const l = parseList3(document.getElementById("l3").value);
+        document.getElementById("out3").textContent = "Sum = " + sumMultiples3(a, b, l);
+      }
+    </script>
+  </section>
+
+  <hr>
+
+  <!-- ============ SECTION 2: EX 4 ============ -->
+  <section>
+    <!-- HTML -->
+    <br />
+    Ex 4: Create a function to find the sum of all the multiples of factors in
+    list f in list m.<br />
+    Ex 4.1 Use text boxes to get f and m, as comma or space separated lists.<br /><br />
+
+    f: <input type="text" id="f4" placeholder="e.g. 2 7" /><br />
+    m: <input type="text" id="m4" placeholder="e.g. 14, 21, 8, 9" /><br /><br />
+
+    <button onclick="runEx4()">Calculate</button>
+    <p id="out4"></p>
+
+    <!-- JS -->
+    <script>
+      // Turn text like "1, 2 3" into the list [1, 2, 3]
+      function parseList4(text) {
+        return text
+          .split(/[\s,]+/)
+          .filter((s) => s !== "")
+          .map(Number)
+          .filter((n) => !isNaN(n));
+      }
+
+      // Sum every number in m that is a multiple of ANY factor in f (each counted once)
+      function sumMultiples4(f, m) {
+        let total = 0;
+        for (const n of m) {
+          if (f.some((x) => x !== 0 && n % x === 0)) {
+            total += n;
+          }
+        }
+        return total;
+      }
+
+      // Read the text boxes, call the function, show the result
+      function runEx4() {
+        const f = parseList4(document.getElementById("f4").value);
+        const m = parseList4(document.getElementById("m4").value);
+
+        // If Ex 4.1 has a rule about the length of f, add the check here.
+        // Example: if (f.length !== 3) { ...show an error and return; }
+
+        document.getElementById("out4").textContent =
+          "Sum = " + sumMultiples4(f, m);
+      }
+    </script>
+  </section>
+<a href="index.html"><button>Index/Home page</button></a>
 </body>
 </html>
