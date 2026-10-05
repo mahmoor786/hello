@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Currency Converter</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 1rem;
+      background: #0f2f2b; font-family: system-ui, sans-serif; color: #12332f;
+    }
+    .box { width: 100%; max-width: 440px; padding: 1.75rem; background: #eef2ec; border-radius: 18px; }
+    h1 { margin: 0 0 1.25rem; font-size: 1.6rem; }
+    label { display: block; margin: 0.9rem 0 0.3rem; font-size: 0.85rem; color: #5b6f69; }
+    input, select {
+      width: 100%; padding: 0.7rem; font: inherit; border: 1.5px solid #c9d4cb;
+      border-radius: 10px; background: #fff;
+    }
+    input { font-size: 1.4rem; font-weight: 600; }
+    .row { display: flex; align-items: flex-end; gap: 0.5rem; }
+    .row div { flex: 1; min-width: 0; }
+    button {
+      width: 44px; height: 44px; border: 0; border-radius: 50%; cursor: pointer;
+      background: #0b6b57; color: #fff; font-size: 1.1rem;
+    }
+    #result { margin: 1.5rem 0 0.25rem; font-size: 2rem; font-weight: 700; word-break: break-word; }
+    #info { margin: 0; font-size: 0.85rem; color: #5b6f69; }
+    #info.error { color: #a3361f; }
+  </style>
+</head>
+<body>
+  <main class="box">
+    <h1>Currency converter</h1>
+
+    <label for="amount">Amount</label>
+    <input id="amount" type="number" min="0" step="any" value="100">
+
+    <div class="row">
+      <div><label for="from">From</label><select id="from"></select></div>
+      <button id="swap" type="button" aria-label="Swap currencies">⇄</button>
+      <div><label for="to">To</label><select id="to"></select></div>
+    </div>
+
+    <p id="result">—</p>
+    <p id="info"></p>
+  </main>
+
+  <script>
+    const API_KEY = "f1e754ea799dce7962a39828";
+    const API_URL = `https://v6.exchangerate-api.com/v6/${API_KEY}/latest/`;
+
+    const amountEl = document.getElementById("amount");
+    const fromEl = document.getElementById("from");
+    const toEl = document.getElementById("to");
+    const resultEl = document.getElementById("result");
+    const infoEl = document.getElementById("info");
+
+    const cache = {}; // rates saved per base currency
+
+    async function getRates(base) {
+      if (cache[base]) return cache[base];
+      const res = await fetch(API_URL + base);
+      const data = await res.json();
+      if (data.result !== "success") throw new Error(data["error-type"] || "API error");
+      return (cache[base] = data);
+    }
+
+    function fill(select, codes, selected) {
+      select.innerHTML = codes.map(c => `<option>${c}</option>`).join("");
+      select.value = selected;
+    }
+
+    async function convert() {
+      const amount = parseFloat(amountEl.value);
+      if (isNaN(amount) || amount < 0) {
+        resultEl.textContent = "—";
+        infoEl.textContent = "Enter an amount of 0 or more.";
+        infoEl.className = "error";
+        return;
+      }
+      try {
+        const data = await getRates(fromEl.value);
+        const rate = data.conversion_rates[toEl.value];
+        resultEl.textContent = `${(amount * rate).toFixed(2)} ${toEl.value}`;
+        infoEl.textContent = `1 ${fromEl.value} = ${rate.toFixed(4)} ${toEl.value}`;
+        infoEl.className = "";
+      } catch (err) {
+        infoEl.textContent = "Couldn't load rates: " + err.message;
+        infoEl.className = "error";
+      }
+    }
+
+    document.getElementById("swap").onclick = () => {
+      [fromEl.value, toEl.value] = [toEl.value, fromEl.value];
+      convert();
+    };
+    [amountEl, fromEl, toEl].forEach(el => el.addEventListener("input", convert));
+
+    getRates("USD").then(data => {
+      const codes = Object.keys(data.conversion_rates);
+      fill(fromEl, codes, "USD");
+      fill(toEl, codes, "PKR");
+      convert();
+    }).catch(err => {
+      infoEl.textContent = "Couldn't load currencies: " + err.message;
+      infoEl.className = "error";
+    });
+  </script>
+</body>
+</html>
