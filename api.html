@@ -56,7 +56,7 @@
     const resultEl = document.getElementById("result");
     const infoEl = document.getElementById("info");
 
-    const cache = {}; // rates saved per base currency
+    const cache = {}; // simply DOM use ho raha ha values lena ka lya input sa
 
     async function getRates(base) {
       if (cache[base]) return cache[base];
@@ -65,11 +65,15 @@
       if (data.result !== "success") throw new Error(data["error-type"] || "API error");
       return (cache[base] = data);
     }
+        // base curreny code ha es ma or api sa us ka data le rahe heen or cache ma save ho raha ha
+
 
     function fill(select, codes, selected) {
       select.innerHTML = codes.map(c => `<option>${c}</option>`).join("");
       select.value = selected;
     }
+
+    //es ma jo options heen un ma data fill ho raha ha
 
     async function convert() {
       const amount = parseFloat(amountEl.value);
@@ -88,7 +92,9 @@
       } catch (err) {
         infoEl.textContent = "Couldn't load rates: " + err.message;
         infoEl.className = "error";
-      }
+      }  
+    //   exceptional handling ho rahi ha idr or sath convert b kya ja raha ha
+        // from el sa amount ko float ma convert kiya gya ha or phir selected value ka crosponding jo us ka rate ha us sa mulpty kr rahe heen 
     }
 
     document.getElementById("swap").onclick = () => {
@@ -96,7 +102,7 @@
       convert();
     };
     [amountEl, fromEl, toEl].forEach(el => el.addEventListener("input", convert));
-
+    // do variables ki values apas ma exchange kr di ha ne
     getRates("USD").then(data => {
       const codes = Object.keys(data.conversion_rates);
       fill(fromEl, codes, "USD");
